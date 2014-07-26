@@ -6,13 +6,6 @@ class JobsController extends Controller {
 
     public function beforeFilter() {
         parent::beforeFilter();
-
-        $this->autoRender = false;
-
-        $this->response->type('json');
-        $this->response->header('Access-Control-Allow-Origin', '*');
-
-        Router::parseExtensions('json');
     }
 
     public function fetch() {
@@ -21,12 +14,23 @@ class JobsController extends Controller {
         return json_encode($data);
     }
 
-    public function add($data) {
+    public function add($data = null) {
 
-        if(!isset($data) || empty($data) || $data == "") {
+        /*if(!isset($data) || empty($data) || $data == "") {
 
             return "No data found";
-        }
+        }*/
+
+        $data = '{
+            "Description": "Desc",
+            "Location": "Loc",
+            "Value": "10",
+            "Owner": "1",
+            "AssignedTo": "2",
+            "Charity": "3",
+            "Breakdown": "50",
+            "Status": "Listed"
+        }';
 
         /*
         id
@@ -42,18 +46,18 @@ class JobsController extends Controller {
 
         $data = json_decode($data);
 
-        $user['User']['AccountName'] = $data->AccountName;
-        $user['User']['FirstName'] = $data->FirstName;
-        $user['User']['Surname'] = $data->Surname;
-        $user['User']['PhoneNo'] = $data->PhoneNo;
-        $user['User']['Email'] = $data->Email;
-        $user['User']['PayPalAccount'] = $data->PayPalAccount;
-        $user['User']['SellerPoints'] = $data->SellerPoints;
-        $user['User']['BuyerPoints'] = $data->BuyerPoints;
+        $job['Job']['Description'] = $data->Description;
+        $job['Job']['Location'] = $data->Location;
+        $job['Job']['Value'] = $data->Value;
+        $job['Job']['Owner'] = $data->Owner;
+        $job['Job']['AssignedTo'] = $data->AssignedTo;
+        $job['Job']['Charity'] = $data->Charity;
+        $job['Job']['Breakdown'] = $data->Breakdown;
+        $job['Job']['Status'] = $data->Status;
 
-        $this->User->create();
+        $this->Job->create();
 
-        $result = $this->User->save($user);
+        $result = $this->Job->save($job);
 
         if(isset($result) && !empty($result) && !is_string($result)) {
 
