@@ -17,6 +17,11 @@ class JobsController extends Controller {
         Router::parseExtensions('json');
 
         $this->data = $this->request->input('json_decode');
+
+        if(!isset($this->data) || empty($this->data) || $this->data == "") {
+
+            return json_encode(array('error' => 'No data found'));
+        }
     }
 
     public function fetch() {
@@ -26,11 +31,6 @@ class JobsController extends Controller {
     }
 
     public function add($data = null) {
-
-        /*if(!isset($this->data) || empty($this->data) || $this->data == "") {
-
-            return json_encode(array('error' => 'No data found'));
-        }*/
 
         $data = '{
             "Description": "Desc",
