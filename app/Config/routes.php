@@ -22,6 +22,7 @@
 
     Router::mapResources('jobs');
     Router::mapResources('users');
+    Router::mapResources('charities');
     Router::parseExtensions();
 
 /**
