@@ -95,7 +95,7 @@ class UsersController extends Controller {
 
         if(isset($result) && !empty($result) && !is_string($result)) {
 
-            return json_encode(array('AccountName' => $result['User']['AccountName']));
+            return json_encode(array('user' => $result['User']));
         }
         else {
 

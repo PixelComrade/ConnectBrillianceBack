@@ -32,7 +32,7 @@ class JobsController extends Controller {
 
     public function add() {
 
-        $data = '{
+        /*$data = '{
             "JobName": "Job",
             "Description": "Desc",
             "Location": "Loc",
@@ -42,7 +42,7 @@ class JobsController extends Controller {
             "CharityAmount": "50",
             "AssignedToAmount": "50",
             "Status": "Listed"
-        }';
+        }';*/
 
         /*
         id
@@ -59,20 +59,20 @@ class JobsController extends Controller {
         Status (Listed, Accepted, Completed)
         */
 
-        $data = json_decode($data);
+        //$data = 'yes';
+        //return json_encode($this->data);
 
-        $job['Job']['JobName'] = $this->$data->JobName;
-        $job['Job']['Description'] = $this->$data->Description;
-        $job['Job']['Location'] = $this->$data->Location;
-        $job['Job']['Owner'] = $this->$data->Owner;
-        $job['Job']['AssignedTo'] = $this->$data->AssignedTo;
-        $job['Job']['Charity'] = $this->$data->Charity;
-        $job['Job']['CharityAmount'] = $this->$data->CharityAmount;
-        $job['Job']['AssignedToAmount'] = $this->$data->AssignedToAmount;
-        $job['Job']['Status'] = $this->$data->Status;
+        $job['Job']['JobName'] = $this->data->JobName;
+        $job['Job']['Description'] = $this->data->Description;
+        $job['Job']['Location'] = $this->data->Location;
+        $job['Job']['Owner'] = $this->data->Owner;
+        $job['Job']['AssignedTo'] = '';
+        $job['Job']['Charity'] = '';
+        $job['Job']['CharityAmount'] = $this->data->CharityAmount;
+        $job['Job']['AssignedToAmount'] = $this->data->AssignedToAmount;
+        $job['Job']['Status'] = 'Listed';
 
         $this->Job->create();
-
         $result = $this->Job->save($job);
 
         if(isset($result) && !empty($result) && !is_string($result)) {
