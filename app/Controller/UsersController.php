@@ -7,12 +7,16 @@ class UsersController extends Controller {
     public function beforeFilter() {
         parent::beforeFilter();
 
+        $this->autoRender = false;
+        $this->response->type('json');
+        $this->response->header('Access-Control-Allow-Origin', '*');
+        $this->response->header('Access-Control-Allow-Methods', '*');
+        $this->response->header('Access-Control-Allow-Headers', 'X-Requested-With');
+        $this->response->header('Access-Control-Allow-Headers', 'Content-Type, x-xsrf-token');
+        $this->response->header('Access-Control-Max-Age', '172800');
+        Router::parseExtensions('json');
+
         $this->data = $this->request->input('json_decode');
-    }
-
-    public functon login() {
-
-
     }
 
     public function add() {
@@ -57,7 +61,7 @@ class UsersController extends Controller {
         $user['User']['SellerPoints'] = 0;
         $user['User']['BuyerPoints'] = 0;
 
-        $this->User->create($user);
+        $this->User->create();
 
         $result = $this->User->save($user);
 

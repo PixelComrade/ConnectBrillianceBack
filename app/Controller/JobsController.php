@@ -6,6 +6,17 @@ class JobsController extends Controller {
 
     public function beforeFilter() {
         parent::beforeFilter();
+
+        $this->autoRender = false;
+        $this->response->type('json');
+        $this->response->header('Access-Control-Allow-Origin', '*');
+        $this->response->header('Access-Control-Allow-Methods', '*');
+        $this->response->header('Access-Control-Allow-Headers', 'X-Requested-With');
+        $this->response->header('Access-Control-Allow-Headers', 'Content-Type, x-xsrf-token');
+        $this->response->header('Access-Control-Max-Age', '172800');
+        Router::parseExtensions('json');
+
+        $this->data = $this->request->input('json_decode');
     }
 
     public function fetch() {
@@ -16,10 +27,10 @@ class JobsController extends Controller {
 
     public function add($data = null) {
 
-        /*if(!isset($data) || empty($data) || $data == "") {
+        if(!isset($this->data) || empty($this->data) || $this->data == "") {
 
-            return "No data found";
-        }*/
+            return json_encode(array('error' => 'No data found'));
+        }
 
         $data = '{
             "Description": "Desc",
@@ -61,11 +72,11 @@ class JobsController extends Controller {
 
         if(isset($result) && !empty($result) && !is_string($result)) {
 
-            return "Success";
+            return json_encode(array('Owner' => $result['Job']['Owner']));
         }
         else {
 
-            return "Failure";
+            return json_encode(array('error' => 'Could not save to database'));
         }
     }
 
