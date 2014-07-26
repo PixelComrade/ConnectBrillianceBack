@@ -27,10 +27,10 @@ class JobsController extends Controller {
 
     public function add($data = null) {
 
-        if(!isset($this->data) || empty($this->data) || $this->data == "") {
+        /*if(!isset($this->data) || empty($this->data) || $this->data == "") {
 
             return json_encode(array('error' => 'No data found'));
-        }
+        }*/
 
         $data = '{
             "Description": "Desc",
@@ -38,8 +38,9 @@ class JobsController extends Controller {
             "Value": "10",
             "Owner": "1",
             "AssignedTo": "2",
-            "Charity": "3",
-            "Breakdown": "50",
+            "Charity": "1",
+            "CharityAmount": "50",
+            "AssignedToAmount": "50",
             "Status": "Listed"
         }';
 
@@ -63,7 +64,8 @@ class JobsController extends Controller {
         $job['Job']['Owner'] = $data->Owner;
         $job['Job']['AssignedTo'] = $data->AssignedTo;
         $job['Job']['Charity'] = $data->Charity;
-        $job['Job']['Breakdown'] = $data->Breakdown;
+        $job['Job']['CharityAmount'] = $data->CharityAmount;
+        $job['Job']['AssignedToAmount'] = $data->AssignedToAmount;
         $job['Job']['Status'] = $data->Status;
 
         $this->Job->create();
