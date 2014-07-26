@@ -8,11 +8,15 @@ class JobsController extends Controller {
         parent::beforeFilter();
 
         $this->autoRender = false;
-
         $this->response->type('json');
         $this->response->header('Access-Control-Allow-Origin', '*');
-
+        $this->response->header('Access-Control-Allow-Methods', '*');
+        $this->response->header('Access-Control-Allow-Headers', 'X-Requested-With');
+        $this->response->header('Access-Control-Allow-Headers', 'Content-Type, x-xsrf-token');
+        $this->response->header('Access-Control-Max-Age', '172800');
         Router::parseExtensions('json');
+
+        $this->data = $this->request->input('json_decode');
     }
 
     public function fetch() {
@@ -21,12 +25,24 @@ class JobsController extends Controller {
         return json_encode($data);
     }
 
-    public function add($data) {
+    public function add($data = null) {
 
-        if(!isset($data) || empty($data) || $data == "") {
+        /*if(!isset($this->data) || empty($this->data) || $this->data == "") {
 
-            return "No data found";
-        }
+            return json_encode(array('error' => 'No data found'));
+        }*/
+
+        $data = '{
+            "Description": "Desc",
+            "Location": "Loc",
+            "Value": "10",
+            "Owner": "1",
+            "AssignedTo": "2",
+            "Charity": "1",
+            "CharityAmount": "50",
+            "AssignedToAmount": "50",
+            "Status": "Listed"
+        }';
 
         /*
         id
@@ -42,26 +58,27 @@ class JobsController extends Controller {
 
         $data = json_decode($data);
 
-        $user['User']['AccountName'] = $data->AccountName;
-        $user['User']['FirstName'] = $data->FirstName;
-        $user['User']['Surname'] = $data->Surname;
-        $user['User']['PhoneNo'] = $data->PhoneNo;
-        $user['User']['Email'] = $data->Email;
-        $user['User']['PayPalAccount'] = $data->PayPalAccount;
-        $user['User']['SellerPoints'] = $data->SellerPoints;
-        $user['User']['BuyerPoints'] = $data->BuyerPoints;
+        $job['Job']['Description'] = $data->Description;
+        $job['Job']['Location'] = $data->Location;
+        $job['Job']['Value'] = $data->Value;
+        $job['Job']['Owner'] = $data->Owner;
+        $job['Job']['AssignedTo'] = $data->AssignedTo;
+        $job['Job']['Charity'] = $data->Charity;
+        $job['Job']['CharityAmount'] = $data->CharityAmount;
+        $job['Job']['AssignedToAmount'] = $data->AssignedToAmount;
+        $job['Job']['Status'] = $data->Status;
 
-        $this->User->create();
+        $this->Job->create();
 
-        $result = $this->User->save($user);
+        $result = $this->Job->save($job);
 
         if(isset($result) && !empty($result) && !is_string($result)) {
 
-            return "Success";
+            return json_encode(array('Owner' => $result['Job']['Owner']));
         }
         else {
 
-            return "Failure";
+            return json_encode(array('error' => 'Could not save to database'));
         }
     }
 

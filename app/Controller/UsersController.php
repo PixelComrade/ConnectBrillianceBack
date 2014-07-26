@@ -8,21 +8,25 @@ class UsersController extends Controller {
         parent::beforeFilter();
 
         $this->autoRender = false;
-        
         $this->response->type('json');
         $this->response->header('Access-Control-Allow-Origin', '*');
-
+        $this->response->header('Access-Control-Allow-Methods', '*');
+        $this->response->header('Access-Control-Allow-Headers', 'X-Requested-With');
+        $this->response->header('Access-Control-Allow-Headers', 'Content-Type, x-xsrf-token');
+        $this->response->header('Access-Control-Max-Age', '172800');
         Router::parseExtensions('json');
+
+        $this->data = $this->request->input('json_decode');
     }
 
-    public function add($data = null) {
+    public function add() {
 
-        /*if(!isset($data) || empty($data) || $data == "") {
+        if(!isset($this->data) || empty($this->data) || $this->data == "") {
 
-            return "No data found";
-        }*/
+            return json_encode(array('error' => 'No data found'));
+        }
 
-        $data = '{
+        /*$this->data = '{
             "AccountName": "1234",
             "Password": "1234",
             "FirstName": "John",
@@ -32,7 +36,7 @@ class UsersController extends Controller {
             "PayPalAccount": "1234",
             "SellerPoints": "1234",
             "BuyerPoints": "1234"
-        }';
+        }';*/
 
         /*
         id
@@ -47,29 +51,27 @@ class UsersController extends Controller {
         BuyerPoints
         */
 
-        $data = json_decode($data);
+        $user['User']['AccountName'] = $this->data->AccountName;
+        $user['User']['Password'] = $this->data->Password;
+        $user['User']['FirstName'] = $this->data->FirstName;
+        $user['User']['Surname'] = $this->data->Surname;
+        $user['User']['PhoneNo'] = $this->data->PhoneNo;
+        $user['User']['Email'] = $this->data->Email;
+        $user['User']['PayPalAccount'] = $this->data->PayPalAccount;
+        $user['User']['SellerPoints'] = 0;
+        $user['User']['BuyerPoints'] = 0;
 
-        $user['User']['AccountName'] = $data->AccountName;
-        $user['User']['Password'] = $data->Password;
-        $user['User']['FirstName'] = $data->FirstName;
-        $user['User']['Surname'] = $data->Surname;
-        $user['User']['PhoneNo'] = $data->PhoneNo;
-        $user['User']['Email'] = $data->Email;
-        $user['User']['PayPalAccount'] = $data->PayPalAccount;
-        $user['User']['SellerPoints'] = $data->SellerPoints;
-        $user['User']['BuyerPoints'] = $data->BuyerPoints;
-
-        $this->User->create($user);
+        $this->User->create();
 
         $result = $this->User->save($user);
 
         if(isset($result) && !empty($result) && !is_string($result)) {
 
-            return "Success";
+            return json_encode(array('AccountName' => $result['User']['AccountName']));
         }
         else {
 
-            return "Failure";
+            return json_encode(array('error' => 'Could not save to database'));
         }
     }
 
