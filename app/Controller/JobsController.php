@@ -25,7 +25,7 @@ class JobsController extends Controller {
         return json_encode($data);
     }
 
-    public function add($data = null) {
+    public function add() {
 
         /*if(!isset($this->data) || empty($this->data) || $this->data == "") {
 
@@ -33,9 +33,9 @@ class JobsController extends Controller {
         }*/
 
         $data = '{
+            "JobName": "Job",
             "Description": "Desc",
             "Location": "Loc",
-            "Value": "10",
             "Owner": "1",
             "AssignedTo": "2",
             "Charity": "1",
@@ -46,27 +46,30 @@ class JobsController extends Controller {
 
         /*
         id
+        JobName
         Description
         Location
-        Value
         Owner
         AssignedTo
         Charity
-        Breakdown
+        CharityAmount
+        AssignedToAmount
+        CharityReceipt
+        AssignedToReceipt
         Status (Listed, Accepted, Completed)
         */
 
         $data = json_decode($data);
 
-        $job['Job']['Description'] = $data->Description;
-        $job['Job']['Location'] = $data->Location;
-        $job['Job']['Value'] = $data->Value;
-        $job['Job']['Owner'] = $data->Owner;
-        $job['Job']['AssignedTo'] = $data->AssignedTo;
-        $job['Job']['Charity'] = $data->Charity;
-        $job['Job']['CharityAmount'] = $data->CharityAmount;
-        $job['Job']['AssignedToAmount'] = $data->AssignedToAmount;
-        $job['Job']['Status'] = $data->Status;
+        $job['Job']['JobName'] = $this->$data->JobName;
+        $job['Job']['Description'] = $this->$data->Description;
+        $job['Job']['Location'] = $this->$data->Location;
+        $job['Job']['Owner'] = $this->$data->Owner;
+        $job['Job']['AssignedTo'] = $this->$data->AssignedTo;
+        $job['Job']['Charity'] = $this->$data->Charity;
+        $job['Job']['CharityAmount'] = $this->$data->CharityAmount;
+        $job['Job']['AssignedToAmount'] = $this->$data->AssignedToAmount;
+        $job['Job']['Status'] = $this->$data->Status;
 
         $this->Job->create();
 
